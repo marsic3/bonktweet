@@ -1,12 +1,15 @@
 import React from "react";
-import './popup.css'
+import { WalletWrapper } from "../tabs/components/WalletWrapper";
+import "./popup.css";
 
 const Popup = () => {
-    return (
-        <div>
-            <h1 className="text-4xl text-green-500">Hello World</h1>
-        </div>
-    )
+  return (
+    <WalletWrapper>
+      <div>
+        <h1 className="text-4xl text-green-500">Hello World</h1>
+      </div>
+    </WalletWrapper>
+  );
 };
 
 export default Popup;
