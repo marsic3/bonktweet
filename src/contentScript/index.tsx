@@ -10,13 +10,13 @@ function init() {
   }
 
   const articleList = document.querySelectorAll("article");
-  const root = createRoot(appContainer);
+  // const root = createRoot(appContainer);
 
   for (const element of articleList) {
-    // const root = createRoot(element);
     var btn = document.createElement("button");
     btn.appendChild(document.createTextNode("Bonk tweet"));
     btn.addEventListener("click", function () {
+      // this function should catch the window object
       chrome.runtime.sendMessage({ greeting: "hello" }, function (response) {
         console.log(response.farewell);
         console.log(window);
@@ -24,11 +24,8 @@ function init() {
     });
 
     element.appendChild(btn);
-    // element.innerHTML = `${element.innerHTML}${btn}`;
-    // root.render(<ContentScript />);
-    element.style.color = "white";
   }
-  root.render(<ContentScript />);
+  // root.render(<ContentScript />);
 }
 
 setTimeout(init, 4000);

@@ -6,7 +6,7 @@
   "action": {
     "default_title": "React Boilerplate"
   },
-  "permissions": ["tabs", "scripting", "storage", "identity"],
+  "permissions": ["tabs", "bookmarks", "storage", "identity"],
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
@@ -22,5 +22,9 @@
       "run_at": "document_end",
       "js": ["contentScript.js"]
     }
-  ]
+  ],
+  "externally_connectable": {
+    "ids": ["bfnaelmomeimhlpmgjnjophhpkkoljpa"],
+    "matches": ["https://*.twitter.com/*"]
+  }
 }
