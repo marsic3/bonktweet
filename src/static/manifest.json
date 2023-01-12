@@ -6,7 +6,11 @@
   "action": {
     "default_title": "React Boilerplate"
   },
-  "permissions": ["tabs", "bookmarks", "storage", "identity"],
+  "web_accessible_resources": [{
+    "resources": ["script.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "permissions": ["activeTab","tabs", "bookmarks", "storage", "identity", "webNavigation", "webRequest", "cookies", "notifications"],
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
