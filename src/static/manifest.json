@@ -6,11 +6,29 @@
   "action": {
     "default_title": "React Boilerplate"
   },
-  "web_accessible_resources": [{
-    "resources": ["script.js"],
-    "matches": ["<all_urls>"]
-  }],
-  "permissions": ["activeTab","tabs", "bookmarks", "storage", "identity", "webNavigation", "webRequest", "cookies", "notifications"],
+  "web_accessible_resources": [
+    {
+      "resources": ["script.js"],
+      "matches": ["https://*.twitter.com/*"]
+    },
+    {
+      "resources": [
+        "https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"
+      ],
+      "matches": ["https://*.twitter.com/*"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "bookmarks",
+    "storage",
+    "identity",
+    "webNavigation",
+    "webRequest",
+    "cookies",
+    "notifications"
+  ],
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
@@ -26,9 +44,5 @@
       "run_at": "document_end",
       "js": ["contentScript.js"]
     }
-  ],
-  "externally_connectable": {
-    "ids": ["bfnaelmomeimhlpmgjnjophhpkkoljpa"],
-    "matches": ["https://*.twitter.com/*"]
-  }
+  ]
 }
