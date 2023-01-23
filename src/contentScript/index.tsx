@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "../assets/tailwind.css";
-import { buyTweet } from "../solana/bonktweet";
+import { buyTweet, ITransaction } from "../solana/bonktweet";
 import ContentScript from "./bonkButton";
 import { PublicKey } from "@solana/web3.js";
 declare global {

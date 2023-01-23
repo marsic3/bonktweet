@@ -1,14 +1,8 @@
-import { AnchorWallet } from "@solana/wallet-adapter-react";
-import React from "react";
-import { createRoot } from "react-dom/client";
-import "../assets/tailwind.css";
-import { buyTweet } from "../solana/bonktweet";
-import {
-  AccountMeta,
-  PublicKey,
-  SystemProgram,
-  SYSVAR_RENT_PUBKEY,
-} from "@solana/web3.js";
+import { ITransaction } from "../solana/bonktweet";
+
+interface MyTransaction {
+  detail: ITransaction;
+}
 
 function init() {
   // document.addEventListener("callPhantom", function (data) {
@@ -25,11 +19,10 @@ function init() {
           new CustomEvent("sendWallet", { detail: result.publicKey.toString() })
         );
         document.addEventListener("getTransaction", async function (data: any) {
-          console.log("received", data.detail);
+          const trx: ITransaction = data.detail;
+          console.log("dsaas", trx);
           try {
-            const tx = await window.phantom.solana.signAllTransactions([
-              data.detail,
-            ]);
+            const tx = await window.phantom.solana.signTransaction(trx);
             console.log(tx, "txxxxx");
           } catch (error) {
             console.log("errror", error);
