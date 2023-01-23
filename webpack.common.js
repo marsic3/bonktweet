@@ -4,6 +4,7 @@ const HtmlPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const tailwindcss = require("tailwindcss");
 const autoprefixer = require("autoprefixer");
+const webpack = require("webpack");
 
 module.exports = {
   entry: {
@@ -16,7 +17,6 @@ module.exports = {
     bonktweet: path.resolve("src/solana/bonktweet.ts"),
     utilities: path.resolve("src/solana/utilities.ts"),
     programIdl: path.resolve("src/solana/program-idl.ts"),
-    solana: path.resolve("node_modules/@solana/web3.js/lib/index.iife.js"),
   },
   module: {
     rules: [
@@ -56,6 +56,15 @@ module.exports = {
     new CleanWebpackPlugin({
       cleanStaleWebpackAssets: false,
     }),
+    new webpack.DefinePlugin({
+      "process.env": {
+        NODE_ENV: JSON.stringify("development"),
+      },
+    }),
+    new webpack.ProvidePlugin({
+      process: "process/browser",
+      Buffer: ["buffer", "Buffer"],
+    }),
     new CopyPlugin({
       patterns: [
         {
@@ -77,6 +86,7 @@ module.exports = {
     fallback: {
       crypto: require.resolve("crypto-browserify"),
       stream: require.resolve("stream-browserify"),
+      fs: false,
     },
   },
   output: {

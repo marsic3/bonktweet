@@ -1,63 +1,102 @@
-import { programFactory, RPC_CONNECTION } from "./utilities";
-import { sendTransaction } from "./transactions/sendTransaction";
 import { TOKEN_PROGRAM_ID } from "@project-serum/anchor/dist/cjs/utils/token";
-import { getOrCreateAssociatedTokenAccount } from "@solana/spl-token";
-import { PublicKey } from "@solana/web3.js";
-// import * as anchor from "@project-serum/anchor";
+import { ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import {
+  AccountMeta,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
+import { Program, AnchorProvider, BN } from "@project-serum/anchor";
+import { IDL } from "./program-idl";
+import { Buffer } from "buffer";
+import NodeWallet from "@project-serum/anchor/dist/cjs/nodewallet";
+window.Buffer = Buffer;
 
-// console.log("ee22");
-// console.log("ee");
+export const SOLANA_PROGRAM_ID = new PublicKey(
+  "AjWzDnEEKPYvANmYvSsmu7LDfATQjHkfjzK1LMDUQSzR"
+);
 
-export const buyTweet = async (wallet, tweetId) => {
-  console.log(wallet);
-  console.log(tweetId);
-  // const bonkMint = new PublicKey("NTRNt4MmibcfkRHww3Y4WXRwFkXWxLvFXhBJ27YUbVN");
-  // console.log(bonkMint);
+export const SOLANA_ENDPOINT = "https://api.devnet.solana.com";
 
-  // anchor.workspace.getToken
-  // const program = programFactory(wallet);
-  // console.log(program);
-  // console.log(bonkMint);
+export const RPC_CONNECTION = new Connection(SOLANA_ENDPOINT, "confirmed");
 
-  // const [treasury] = PublicKey.findProgramAddressSync(
-  //   [Buffer.from("treasury"), bonkMint.toBuffer()],
-  //   program.programId
-  // );
-  // const [tweet] = PublicKey.findProgramAddressSync(
-  //   [Buffer.from("tweet"), Buffer.from(tweetId)],
-  //   program.programId
-  // );
-  // let remainingAccounts;
-  // const tweetAccount = await program.account.tweet.fetch(tweet);
-  // const buyerBonkAcc = await getOrCreateAssociatedTokenAccount(
-  //   RPC_CONNECTION,
-  //   wallet,
+export const programFactory = () => {
+  return new Program(
+    IDL,
+    SOLANA_PROGRAM_ID,
+    new AnchorProvider(RPC_CONNECTION, new NodeWallet(Keypair.generate()), {})
+  );
+};
+
+export const buyTweet = async (wallet: PublicKey, tweetId = "1234") => {
+  const bonkMint = new PublicKey("NTRNt4MmibcfkRHww3Y4WXRwFkXWxLvFXhBJ27YUbVN");
+
+  const program = programFactory();
+
+  const [treasury] = PublicKey.findProgramAddressSync(
+    [Buffer.from("treasury"), bonkMint.toBuffer()],
+    program.programId
+  );
+  const [tweet] = PublicKey.findProgramAddressSync(
+    [Buffer.from("tweet"), Buffer.from(tweetId)],
+    program.programId
+  );
+  console.log(treasury.toString(), "treasury");
+  console.log(tweet.toString(), "tweet");
+
+  let remainingAccounts: AccountMeta[];
+
+  // const buyerBonkAcc = getAssociatedTokenAddressSync(
   //   bonkMint,
-  //   wallet.publicKey
+  //   new PublicKey(wallet)
   // );
-  // if (tweetAccount.owner) {
-  //   const ownerBonkAccount = await getOrCreateAssociatedTokenAccount(
-  //     RPC_CONNECTION,
-  //     wallet,
-  //     bonkMint,
-  //     tweetAccount.owner
-  //   );
-  //   remainingAccounts = [
-  //     { pubkey: ownerBonkAccount, isSigner: false, isWritable: true },
-  //   ];
-  // }
-  // await program.methods
-  //   .buyTweet(tweetId)
-  //   .accounts({
-  //     tweet,
-  //     buyer: wallet.publicKey,
-  //     buyerBonkAcc: buyerBonkAcc.address,
-  //     treasury,
-  //     bonkMint,
-  //     systemProgram: SystemProgram.programId,
-  //     tokenProgram: TOKEN_PROGRAM_ID,
-  //   })
-  //   .remainingAccounts(remainingAccounts)
-  //   .signers([wallet])
-  //   .rpc();
+
+  const [buyerBonkAcc] = PublicKey.findProgramAddressSync(
+    [wallet.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), bonkMint.toBuffer()],
+    ASSOCIATED_TOKEN_PROGRAM_ID
+  );
+
+  const buyerBonkTA = await RPC_CONNECTION.getAccountInfo(buyerBonkAcc);
+  console.log("eee213", buyerBonkTA);
+
+  // try {
+  //   const tweetAccount = await program.account.tweet.fetch(tweet);
+  //   if (tweetAccount.owner) {
+  //     const ownerBonkAccount = await getOrCreateAssociatedTokenAccount(
+  //       RPC_CONNECTION,
+  //       wallet,
+  //       bonkMint,
+  //       tweetAccount.owner
+  //     );
+  //     remainingAccounts = [
+  //       { pubkey: ownerBonkAccount.address, isSigner: false, isWritable: true },
+  //     ];
+  //   }
+  // } catch (error) {}
+
+  const ix = await program.methods
+    .buyTweet(tweetId)
+    .accounts({
+      tweet,
+      buyer: wallet,
+      buyerBonkAcc: buyerBonkAcc,
+      treasury,
+      bonkMint,
+      systemProgram: SystemProgram.programId,
+      tokenProgram: TOKEN_PROGRAM_ID,
+    })
+    .remainingAccounts(remainingAccounts)
+    .instruction();
+
+  console.log(ix, "ix");
+
+  const tx = new Transaction({
+    feePayer: wallet,
+    recentBlockhash: (await RPC_CONNECTION.getLatestBlockhash()).blockhash,
+  });
+
+  tx.add(ix);
+  return tx;
 };

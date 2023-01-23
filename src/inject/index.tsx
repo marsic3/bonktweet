@@ -11,20 +11,30 @@ import {
 } from "@solana/web3.js";
 
 function init() {
+  // document.addEventListener("callPhantom", function (data) {
+  //   console.log("received", data);
+  // });
+
   window.phantom.solana
     .connect()
     .then((result) => {
-      if (result?.publicKey) {
-        const wallet: AnchorWallet = {
-          publicKey: result?.publicKey,
-          signTransaction: () => window.phantom.solana.signTransaction(),
-          signAllTransactions: () =>
-            window.phantom.solana.signAllTransactions(),
-        };
-        console.log(new PublicKey("dsds"));
+      console.log("result", result);
 
-        buyTweet(wallet, "123");
-        // window.phantom.solana.signAllTransactions(result);
+      if (result?.publicKey) {
+        document.dispatchEvent(
+          new CustomEvent("sendWallet", { detail: result.publicKey.toString() })
+        );
+        document.addEventListener("getTransaction", async function (data: any) {
+          console.log("received", data.detail);
+          try {
+            const tx = await window.phantom.solana.signAllTransactions([
+              data.detail,
+            ]);
+            console.log(tx, "txxxxx");
+          } catch (error) {
+            console.log("errror", error);
+          }
+        });
         // console.log(window.phantom.solana.signAllTransactions());
       }
     })

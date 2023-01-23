@@ -6,10 +6,10 @@ import { Buffer } from "buffer";
 window.Buffer = Buffer;
 
 export const SOLANA_PROGRAM_ID = new PublicKey(
-  process.env.REACT_APP_BONK_TWEET_PROGRAM_ID as string
+  "AjWzDnEEKPYvANmYvSsmu7LDfATQjHkfjzK1LMDUQSzR"
 );
 
-export const SOLANA_ENDPOINT = process.env.REACT_APP_RPC as string;
+export const SOLANA_ENDPOINT = "https://api.devnet.solana.com";
 
 export const RPC_CONNECTION = new Connection(SOLANA_ENDPOINT, "confirmed");
 

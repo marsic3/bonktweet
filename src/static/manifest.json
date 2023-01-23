@@ -10,12 +10,6 @@
     {
       "resources": ["script.js"],
       "matches": ["https://*.twitter.com/*"]
-    },
-    {
-      "resources": [
-        "https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"
-      ],
-      "matches": ["https://*.twitter.com/*"]
     }
   ],
   "permissions": [
@@ -27,7 +21,8 @@
     "webNavigation",
     "webRequest",
     "cookies",
-    "notifications"
+    "notifications",
+    "scripting"
   ],
   "icons": {
     "16": "icon.png",
@@ -41,6 +36,7 @@
   "content_scripts": [
     {
       "matches": ["https://*.twitter.com/*"],
+      "world": "MAIN",
       "run_at": "document_end",
       "js": ["contentScript.js"]
     }

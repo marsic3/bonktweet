@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "../assets/tailwind.css";
+import { buyTweet } from "../solana/bonktweet";
 import ContentScript from "./bonkButton";
-
+import { PublicKey } from "@solana/web3.js";
 declare global {
   interface Window {
     phantom: any;
@@ -21,21 +22,24 @@ function init() {
     btn.appendChild(document.createTextNode("Bonk tweet"));
     btn.style.color = "white";
     tweet.setAttribute("name", "Bonk");
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", async function () {
       var s = document.createElement("script");
       s.src = chrome.runtime.getURL("./script.js");
+
       s.onload = function () {
         s.remove();
       };
       document.body.appendChild(s);
-      var solana = document.createElement("script");
-      solana.src = chrome.runtime.getURL(
-        "https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"
-      );
-      solana.onload = function () {
-        solana.remove();
-      };
-      document.body.appendChild(solana);
+      document.addEventListener("sendWallet", async function (data: any) {
+        console.log(data, "dataaaaaa");
+
+        const bonktweet = await buyTweet(new PublicKey(data.detail));
+        console.log(bonktweet, "bonktweet");
+
+        document.dispatchEvent(
+          new CustomEvent("getTransaction", { detail: bonktweet })
+        );
+      });
     });
     // const root = createRoot(tweet);
     // root.render(<ContentScript />);
