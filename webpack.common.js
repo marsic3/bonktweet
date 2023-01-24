@@ -8,11 +8,8 @@ const webpack = require("webpack");
 
 module.exports = {
   entry: {
-    popup: path.resolve("src/popup/index.tsx"),
-    options: path.resolve("src/options/index.tsx"),
     background: path.resolve("src/background/background.ts"),
     contentScript: path.resolve("src/contentScript/index.tsx"),
-    bonkButton: path.resolve("src/contentScript/bonkButton.tsx"),
     script: path.resolve("src/inject/index.tsx"),
     wallet: path.resolve("src/inject/wallet.tsx"),
     bonktweet: path.resolve("src/solana/bonktweet.ts"),

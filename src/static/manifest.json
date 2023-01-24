@@ -4,7 +4,7 @@
   "description": "buy tweet using bonks",
   "version": "1.0.0",
   "action": {
-    "default_title": "React Boilerplate"
+    "default_title": "Bonk tweet"
   },
   "web_accessible_resources": [
     {
@@ -37,7 +37,6 @@
     "48": "bonktweet-2.png",
     "128": "bonktweet-3.png"
   },
-  "options_page": "options.html",
   "background": {
     "service_worker": "background.js"
   },

@@ -47,8 +47,6 @@ function init() {
     }
 
     btn.addEventListener("click", async function () {
-      console.log("wallet", wallet);
-
       injectedScript.src = chrome.runtime.getURL("./script.js");
 
       injectedScript.onload = function () {
@@ -93,8 +91,6 @@ function init() {
               }
 
               btn.addEventListener("click", async function () {
-                console.log("wallet", wallet);
-
                 injectedScript.src = chrome.runtime.getURL("./script.js");
 
                 injectedScript.onload = function () {

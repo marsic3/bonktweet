@@ -106,7 +106,6 @@ export const buyTweet = async (wallet: PublicKey, tweetId: string) => {
   tx.add(ix);
 
   const simulateTx = await RPC_CONNECTION.simulateTransaction(tx);
-  console.log(simulateTx, "SIM TX");
 
   return bs58.encode(tx.serializeMessage());
 };
