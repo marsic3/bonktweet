@@ -1,6 +1,4 @@
 function wallet() {
-  console.log("log from wallet");
-
   window.phantom.solana
     .connect()
     .then((result) => {
