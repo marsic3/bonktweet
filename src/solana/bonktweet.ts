@@ -36,7 +36,7 @@ export const programFactory = () => {
   );
 };
 
-export const buyTweet = async (wallet: PublicKey, tweetId = "1234") => {
+export const buyTweet = async (wallet: PublicKey, tweetId: string) => {
   const bonkMint = new PublicKey("NTRNt4MmibcfkRHww3Y4WXRwFkXWxLvFXhBJ27YUbVN");
 
   const program = programFactory();

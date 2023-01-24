@@ -1,8 +1,5 @@
-import React, { useEffect } from "react";
-import { createRoot } from "react-dom/client";
 import "../assets/tailwind.css";
-import { buyTweet, ITransaction } from "../solana/bonktweet";
-import ContentScript from "./bonkButton";
+import { buyTweet } from "../solana/bonktweet";
 import { PublicKey } from "@solana/web3.js";
 declare global {
   interface Window {
@@ -10,36 +7,60 @@ declare global {
     foo: any;
   }
 }
-
 function init() {
   const articleList = document.querySelectorAll("article");
   const articleContainer = document.querySelector(
     "#react-root > div > div > div.css-1dbjc4n.r-18u37iz.r-13qz1uu.r-417010 > main > div"
   );
+  var wallet;
+  const walletScript = document.createElement("script");
+  const injectedScript = document.createElement("script");
+
+  walletScript.src = chrome.runtime.getURL("./wallet.js");
+  walletScript.onload = function () {
+    walletScript.remove();
+  };
+  document.body.appendChild(walletScript);
+
+  document.addEventListener("sendWallet", function (data: any) {
+    wallet = data.detail;
+  });
 
   for (const tweet of articleList) {
     var btn = document.createElement("button");
-    btn.appendChild(document.createTextNode("Bonk tweet"));
-    btn.style.color = "white";
+    var img = document.createElement("img");
+    img.src = chrome.runtime.getURL("./bonkbtn.png");
+    img.style.maxWidth = "100px";
+    img.style.height = "auto";
+    btn.appendChild(img);
     tweet.setAttribute("name", "Bonk");
+    const tweetElement = tweet.querySelector(
+      "div.css-1dbjc4n.r-18u37iz.r-1wbh5a2.r-13hce6t > div > div.css-1dbjc4n.r-18u37iz.r-1q142lx > a"
+    );
+    let tweetId;
+    if (
+      tweetElement &&
+      tweetElement.outerHTML &&
+      tweetElement.outerHTML.match(/\/status\/([0-9]+)/)
+    ) {
+      tweetId = tweetElement.outerHTML.match(/\/status\/([0-9]+)/)[1];
+    }
+
     btn.addEventListener("click", async function () {
-      var s = document.createElement("script");
-      s.src = chrome.runtime.getURL("./script.js");
+      console.log("wallet", wallet);
 
-      s.onload = function () {
-        s.remove();
+      injectedScript.src = chrome.runtime.getURL("./script.js");
+
+      injectedScript.onload = function () {
+        injectedScript.remove();
       };
-      document.body.appendChild(s);
-      document.addEventListener("sendWallet", async function (data: any) {
-        const bonktweet = (await buyTweet(new PublicKey(data.detail))) as any;
+      document.body.appendChild(injectedScript);
 
-        document.dispatchEvent(
-          new CustomEvent("getTransaction", { detail: bonktweet })
-        );
-      });
+      const bonktweet = (await buyTweet(new PublicKey(wallet), tweetId)) as any;
+      document.dispatchEvent(
+        new CustomEvent("getTransaction", { detail: bonktweet })
+      );
     });
-    // const root = createRoot(tweet);
-    // root.render(<ContentScript />);
     tweet.appendChild(btn);
   }
 
@@ -53,16 +74,41 @@ function init() {
             let button = tweet.querySelector("button");
             if (!button) {
               var btn = document.createElement("button");
-              btn.appendChild(document.createTextNode("Bonk tweet"));
-              btn.style.color = "white";
+              var img = document.createElement("img");
+              img.src = chrome.runtime.getURL("./bonkbtn.png");
+              img.style.maxWidth = "100px";
+              img.style.height = "auto";
+              btn.appendChild(img);
               tweet.setAttribute("name", "Bonk");
-              btn.addEventListener("click", function () {
-                var s = document.createElement("script");
-                s.src = chrome.runtime.getURL("./script.js");
-                s.onload = function () {
-                  s.remove();
+              const tweetElement = tweet.querySelector(
+                "div.css-1dbjc4n.r-18u37iz.r-1wbh5a2.r-13hce6t > div > div.css-1dbjc4n.r-18u37iz.r-1q142lx > a"
+              );
+              let tweetId;
+              if (
+                tweetElement &&
+                tweetElement.outerHTML &&
+                tweetElement.outerHTML.match(/\/status\/([0-9]+)/)
+              ) {
+                tweetId = tweetElement.outerHTML.match(/\/status\/([0-9]+)/)[1];
+              }
+
+              btn.addEventListener("click", async function () {
+                console.log("wallet", wallet);
+
+                injectedScript.src = chrome.runtime.getURL("./script.js");
+
+                injectedScript.onload = function () {
+                  injectedScript.remove();
                 };
-                document.body.appendChild(s);
+                document.body.appendChild(injectedScript);
+
+                const bonktweet = (await buyTweet(
+                  new PublicKey(wallet),
+                  tweetId
+                )) as any;
+                document.dispatchEvent(
+                  new CustomEvent("getTransaction", { detail: bonktweet })
+                );
               });
               tweet.appendChild(btn);
             }

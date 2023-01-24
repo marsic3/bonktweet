@@ -14,6 +14,7 @@ module.exports = {
     contentScript: path.resolve("src/contentScript/index.tsx"),
     bonkButton: path.resolve("src/contentScript/bonkButton.tsx"),
     script: path.resolve("src/inject/index.tsx"),
+    wallet: path.resolve("src/inject/wallet.tsx"),
     bonktweet: path.resolve("src/solana/bonktweet.ts"),
     utilities: path.resolve("src/solana/utilities.ts"),
     programIdl: path.resolve("src/solana/program-idl.ts"),
