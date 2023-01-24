@@ -31,10 +31,7 @@ function init() {
       };
       document.body.appendChild(s);
       document.addEventListener("sendWallet", async function (data: any) {
-        console.log(data, "dataaaaaa");
-
-        const bonktweet = await buyTweet(new PublicKey(data.detail));
-        console.log(bonktweet, "bonktweet");
+        const bonktweet = (await buyTweet(new PublicKey(data.detail))) as any;
 
         document.dispatchEvent(
           new CustomEvent("getTransaction", { detail: bonktweet })

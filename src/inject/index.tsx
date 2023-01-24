@@ -1,3 +1,4 @@
+import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes";
 import { ITransaction } from "../solana/bonktweet";
 
 interface MyTransaction {
@@ -5,30 +6,26 @@ interface MyTransaction {
 }
 
 function init() {
-  // document.addEventListener("callPhantom", function (data) {
-  //   console.log("received", data);
-  // });
-
   window.phantom.solana
     .connect()
     .then((result) => {
-      console.log("result", result);
-
       if (result?.publicKey) {
         document.dispatchEvent(
           new CustomEvent("sendWallet", { detail: result.publicKey.toString() })
         );
         document.addEventListener("getTransaction", async function (data: any) {
-          const trx: ITransaction = data.detail;
-          console.log("dsaas", trx);
           try {
-            const tx = await window.phantom.solana.signTransaction(trx);
-            console.log(tx, "txxxxx");
+            const serializedMessage = data.detail;
+            console.log(serializedMessage, "SM");
+            const signedTransactions = await window.phantom.solana.request({
+              method: "signAndSendTransaction",
+              params: { message: serializedMessage },
+            });
+            console.log(signedTransactions, "STX");
           } catch (error) {
             console.log("errror", error);
           }
         });
-        // console.log(window.phantom.solana.signAllTransactions());
       }
     })
     .catch((err) => {});
