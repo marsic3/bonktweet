@@ -1,34 +1,51 @@
 {
   "manifest_version": 3,
-  "name": "react-boilerplate",
-  "description": "react-boilerplate for chrome extension",
+  "name": "Bonk tweet",
+  "description": "buy tweet using bonks",
   "version": "1.0.0",
   "action": {
-    "default_title": "React Boilerplate"
+    "default_title": "Bonk tweet"
   },
-  "web_accessible_resources": [{
-    "resources": ["script.js"],
-    "matches": ["<all_urls>"]
-  }],
-  "permissions": ["activeTab","tabs", "bookmarks", "storage", "identity", "webNavigation", "webRequest", "cookies", "notifications"],
+  "web_accessible_resources": [
+    {
+      "resources": ["script.js"],
+      "matches": ["https://*.twitter.com/*"]
+    },
+    {
+      "resources": ["wallet.js"],
+      "matches": ["https://*.twitter.com/*"]
+    },
+    {
+      "resources": ["bonkbtn.png"],
+      "matches": ["https://*.twitter.com/*"]
+    }
+  ],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "bookmarks",
+    "storage",
+    "identity",
+    "webNavigation",
+    "webRequest",
+    "cookies",
+    "notifications",
+    "scripting"
+  ],
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "bonktweet-1.png",
+    "48": "bonktweet-2.png",
+    "128": "bonktweet-3.png"
   },
-  "options_page": "options.html",
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://*.twitter.com/*"],
+      "world": "MAIN",
       "run_at": "document_end",
       "js": ["contentScript.js"]
     }
-  ],
-  "externally_connectable": {
-    "ids": ["bfnaelmomeimhlpmgjnjophhpkkoljpa"],
-    "matches": ["https://*.twitter.com/*"]
-  }
+  ]
 }
