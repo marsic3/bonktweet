@@ -71,6 +71,7 @@ function init() {
           );
         });
         tweet.appendChild(btn);
+        break;
       }
     }
   }
@@ -86,8 +87,6 @@ function init() {
             );
             const listOfSpans = spanItem.querySelectorAll("span");
             for (const spanItem of listOfSpans) {
-              console.log(spanItem.textContent, "spanItem");
-
               if (spanItem.textContent.toLowerCase().includes("bonk")) {
                 let button = tweet.querySelector("button");
                 if (!button) {
@@ -128,6 +127,7 @@ function init() {
                     );
                   });
                   tweet.appendChild(btn);
+                  break;
                 }
               }
             }
