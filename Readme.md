@@ -22,3 +22,5 @@ Installation
 6. Select dist folder from the project
 
 7. Bonk tweets!!
+
+<img width="1466" alt="Screenshot 2023-01-26 at 12 08 56" src="https://user-images.githubusercontent.com/23741732/214821455-4c9c322c-6e1b-4e8f-9773-68162d93a510.png">
