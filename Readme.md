@@ -15,7 +15,7 @@ Installation
 3. Open chrome://extensions/
 
 4. Make sure you set developer mode 
-<img width="1512" alt="Screenshot 2023-01-26 at 11 15 26" src="https://user-images.githubusercontent.com/23741732/214811157-537766a7-136f-424a-9ebe-e564bbb3804d.png">
+<img width="512" alt="Screenshot 2023-01-26 at 11 15 26" src="https://user-images.githubusercontent.com/23741732/214811157-537766a7-136f-424a-9ebe-e564bbb3804d.png">
 
 5. Click load unpacked 
 
@@ -23,4 +23,4 @@ Installation
 
 7. Bonk tweets!!
 
-<img width="1466" alt="Screenshot 2023-01-26 at 12 08 56" src="https://user-images.githubusercontent.com/23741732/214821455-4c9c322c-6e1b-4e8f-9773-68162d93a510.png">
+<img width="512" alt="Screenshot 2023-01-26 at 12 08 56" src="https://user-images.githubusercontent.com/23741732/214821455-4c9c322c-6e1b-4e8f-9773-68162d93a510.png">
